@@ -25,6 +25,9 @@ function HomePage() {
                 <Timeline playlists={config.playlists}>
                     Conteúdo
                 </Timeline>
+                <Favorites favorites={config.favorites}>
+                    Favorites
+                </Favorites>
             </div>
         </>
     );
@@ -41,6 +44,12 @@ export default HomePage
 // }
 
 
+const StyledBanner = styled.div`
+    background-image: url(${({ ban }) => ban});
+    /* background-image: url(${config.bg}); */
+    height: 230px;
+`;
+
 const StyledHeader = styled.div`
     img {
         width: 80px;
@@ -56,10 +65,50 @@ const StyledHeader = styled.div`
         gap: 16px;
     }
 `;
+
+const StyledFavorites = styled.div`
+  width: 100%;
+  padding: 16px;
+  overflow: hidden;
+  h2 {
+    font-size: 16px;
+    margin-bottom: 16px;
+    text-transform: capitalize;
+  }
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius:50%;
+  }
+  section {
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    padding: 16px;
+    div {
+      
+      width: calc(100vw - 16px * 4);
+      display: grid;
+      grid-gap: 16px;
+      grid-template-columns: repeat(auto-fill,minmax(90px,1fr));
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(90x,1fr);
+      a {
+        scroll-snap-align: start;
+        span {
+          display: block;
+          padding-right: 24px;
+          color: ${({ theme }) => theme.textColorBase || "#222222"};
+        }
+      }
+    }
+  }
+`;
+
 function Header() {
     return (
         <StyledHeader>
-            {/* <img src="banner" /> */}
+            <StyledBanner ban={config.ban}/>
             <section className="user-info">
                 <img src={`https://github.com/${config.github}.png`} />
                 <div>
@@ -87,7 +136,7 @@ function Timeline(propriedades) {
                 console.log(playlistName);
                 console.log(videos);
                 return (
-                    <section>
+                    <section className="favorite-card">
                         <h2>{playlistName}</h2>
                         <div>
                             {videos.map((video) => {
@@ -105,5 +154,33 @@ function Timeline(propriedades) {
                 )
             })}
         </StyledTimeline>
+    )
+}
+
+function Favorites(props) {
+    const favoritesNames = Object.keys(props.favorites)
+    return(
+        <StyledFavorites>
+            {favoritesNames.map((favoriteName) => {
+                const fav_names = props.favorites[favoriteName];
+                return (
+                    <section>
+                        <h2> {favoriteName} </h2>
+                        <div>
+                            {fav_names.map((fav_name) => {
+                                return (
+                                    <a href={fav_name.url}>
+                                        <img src={`${fav_name.url}.png`} />
+                                        <span>
+                                            {fav_name.name}
+                                        </span>
+                                    </a>
+                                )
+                            })}
+                        </div>
+                    </section>
+                )
+            })}
+        </StyledFavorites>
     )
 }
