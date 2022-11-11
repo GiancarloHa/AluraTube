@@ -68,7 +68,7 @@ const StyledBanner = styled.div`
 function Header() {
     return (
         <StyledHeader>
-            <StyledBanner bg={config.bg} />
+            <StyledBanner ban={config.ban} />
             <section className="user-info">
                 <img src={`https://github.com/${config.github}.png`} />
                 <div>
